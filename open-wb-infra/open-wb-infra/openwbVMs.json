@@ -2,6 +2,13 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "_artifactsLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "Change this value to your repo name if deploying from a fork"
+      },
+      "defaultValue": "https://raw.githubusercontent.com/ashapoms/open-wb/master/open-wb-infra/open-wb-infra/"
+    },
     "adminUsername": {
       "type": "string",
       "metadata": {
@@ -53,8 +60,7 @@
     "webMachinePublicIpName": "[concat(parameters('webMachineName'), '-ip01')]",
     "webMachineNsgName": "[concat(parameters('webMachineName'), '-nsg01')]",
     "webMachineNicName": "[concat(parameters('webMachineName'), '-nic01')]",
-    "iisConfigFunction": "iis.ps1\\iisinstall",
-    "iisConfigUrl": ""
+    "iisConfigFunction": "iis.ps1\\iisinstall"
   },
   "resources": [
     {
@@ -201,18 +207,18 @@
         "typeHandlerVersion": "2.24",
         "autoUpgradeMinorVersion": false,
         "settings": {
-          "ModulesUrl": "https://iaasv2tempstorageam.blob.core.windows.net/vmextensionstemporary-100300008c27862b-20170519094006429/IIS.zip?sv=2015-04-05&sr=c&sig=pdZ6%2FJoYwgBWLolcbpOUl7JJfMdUREb8lALKwhD6vDI%3D&se=2017-05-20T09%3A40%3A06Z&sp=rw",
-          "ConfigurationFunction": "[variables('iisConfigFunction')]",
-          "Properties": "",
-          "WmfVersion": "latest",
-          "Privacy": {
-            "DataCollection": "Enable"
+          "modulesUrl": "[concat(parameters('_artifactsLocation'), '/', 'DSC', '/', 'IIS.zip')]",
+          "configurationFunction": "[variables('iisConfigFunction')]",
+          "properties": "",
+          "wmfVersion": "latest",
+          "privacy": {
+            "dataCollection": "Enable"
           }
         },
         "protectedSettings": {}
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_test_srv11_name'))]"
+        "[resourceId('Microsoft.Compute/virtualMachines', parameters('webMachineName'))]"
       ]
     }
   ],
