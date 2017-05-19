@@ -106,7 +106,35 @@
             }
           ]
         }
-      }
+      },
+      "resources": [
+        {
+          "comments": "IIS installation through PowerShell DSC",
+          "type": "extensions",
+          "name": "IISConfiguration",
+          "apiVersion": "2016-04-30-preview",
+          "location": "[resourceGroup().location]",
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.24",
+            "autoUpgradeMinorVersion": false,
+            "settings": {
+              "modulesUrl": "[concat(parameters('_artifactsLocation'), '/', 'DSC', '/', 'IIS.zip')]",
+              "configurationFunction": "[variables('iisConfigFunction')]",
+              "properties": "",
+              "wmfVersion": "latest",
+              "privacy": {
+                "dataCollection": "Enable"
+              }
+            },
+            "protectedSettings": {}
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('webMachineName'))]"
+          ]
+        }
+      ]
     },
     {
       "comments": "The virtual network",
@@ -194,32 +222,6 @@
           "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', variables('webMachineNsgName'))]"
         }
       }
-    },
-    {
-      "comments": "IIS installation through PowerShell DSC",
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "IISConfiguration",
-      "apiVersion": "2016-04-30-preview",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "publisher": "Microsoft.Powershell",
-        "type": "DSC",
-        "typeHandlerVersion": "2.24",
-        "autoUpgradeMinorVersion": false,
-        "settings": {
-          "modulesUrl": "[concat(parameters('_artifactsLocation'), '/', 'DSC', '/', 'IIS.zip')]",
-          "configurationFunction": "[variables('iisConfigFunction')]",
-          "properties": "",
-          "wmfVersion": "latest",
-          "privacy": {
-            "dataCollection": "Enable"
-          }
-        },
-        "protectedSettings": {}
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines', parameters('webMachineName'))]"
-      ]
     }
   ],
   "outputs": {

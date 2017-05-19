@@ -4,9 +4,10 @@
 # The script creates resource group and deploy ARM template
 #
 Add-AzureRmAccount
-$ResourceGroupName = "Open-RG101"
+$TestIndex = "102"
+$ResourceGroupName = "Open-RG" + $TestIndex
 $ResourceGroupLocation = "westeurope"
-$OpenDeploymentName = "Open-Dep101"
+$OpenDeploymentName = "Open-Dep" + $TestIndex
 $TemplateFile = "C:\Users\ashapo\Work Folders\DPE\VS\OpenArm\open-wb\open-wb-infra\open-wb-infra\openwbVMs.json"
 $TemplateParametersFile = "C:\Users\ashapo\Work Folders\DPE\VS\OpenArm\open-wb\open-wb-infra\open-wb-infra\openwbVMs.parameters.json"
 
