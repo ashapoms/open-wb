@@ -1,0 +1,155 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the administrator account of the new VMs"
+      },
+      "defaultValue": "wbadmin"
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The password for the administrator account of the new VMs"
+      }
+    },
+    "gateVMSSName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Gate VM Scale Set"
+      },
+      "maxLength": 61
+    },
+    "gateVmInstanceCount": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of VMs instances (0 to 1,000)"
+      },
+      "maxValue": 100,
+      "defaultValue": 4
+    },
+    "gateMachineSize": {
+      "type": "string",
+      "metadata": {
+        "description": "The size of the Gate VM Scale Set instance"
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "The virtual network for all VMs"
+      }
+    },
+    "virtualNetworkAddressRange": {
+      "type": "string",
+      "metadata": {
+        "description": "The address range of the new VNET in CIDR format"
+      }
+    },
+    "virtualSubnetAddressRange": {
+      "type": "string",
+      "metadata": {
+        "description": "The address range of the main subnet created in the new VNET"
+      }
+    }
+  },
+  "variables": {
+    "gateNamingInfix": "[toLower(substring(concat(parameters('gateVMSSName'), uniqueString(resourceGroup().id)), 0, 9))]",
+    "gateVirtualNetworkName": "[concat(variables('gateNamingInfix'), 'vnet')]",
+    "gateSubnetName": "[concat(variables('gateNamingInfix'), 'subnet')]",
+    "gateNicName": "[concat(variables('gateNamingInfix'), 'nic')]",
+    "gateIpConfigName": "[concat(variables('gateNamingInfix'), 'ipconfig')]",
+    "mainSubnetName": "[concat(parameters('virtualNetworkName'), '-mainsubnet01')]",
+    "vnetId": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+    "mainSubnetRef": "[concat(variables('vnetId'), '/subnets/', variables('mainSubnetName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Compute/virtualMachineScaleSets",
+      "name": "[variables('gateNamingInfix')]",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-04-30-preview",
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', variables('gateVirtualNetworkName'))]"
+      ],
+      "sku": {
+        "name": "[parameters('gateMachineSize')]",
+        "tier": "Standard",
+        "capacity": "[parameters('gateVmInstanceCount')]"
+      },
+      "properties": {
+        "overprovision": "true",
+        "upgradePolicy": {
+          "mode": "Manual"
+        },
+        "virtualMachineProfile": {
+          "storageProfile": {
+            "osDisk": {
+              "createOption": "FromImage",
+              "managedDisk": {
+                "storageAccountType": "Standard_LRS"
+              }
+            },
+            "imageReference": {
+              "publisher": "MicrosoftWindowsServer",
+              "offer": "WindowsServer",
+              "sku": "2008-R2-SP1",
+              "version": "latest"
+            }
+          },
+          "osProfile": {
+            "computerNamePrefix": "[variables('gateNamingInfix')]",
+            "adminUsername": "[parameters('adminUsername')]",
+            "adminPassword": "[parameters('adminPassword')]"
+          },
+          "networkProfile": {
+            "networkInterfaceConfigurations": [
+              {
+                "name": "[variables('gateNicName')]",
+                "properties": {
+                  "primary": "true",
+                  "ipConfigurations": [
+                    {
+                      "name": "[variables('gateIpConfigName')]",
+                      "properties": {
+                        "subnet": {
+                          "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('gateVirtualNetworkName'), '/subnets/', variables('gateSubnetName'))]"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "comments": "The virtual network",
+      "name": "[variables('gateVirtualNetworkName')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2016-12-01",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('virtualNetworkAddressRange')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('gateSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('virtualSubnetAddressRange')]"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {
+  }
+}
