@@ -32,12 +32,20 @@
     </None>
     <Content Include="Deploy-AzureResourceGroup.ps1" />
     <None Include="DeployTemplate.ps1" />
+    <None Include="gateSS.json" />
+    <None Include="gateSS.parameters.json" />
     <None Include="gateVMSS.json" />
     <None Include="gateVMSS.parameters.json" />
+    <None Include="loadVM.json" />
+    <None Include="loadVM.parameters.json" />
+    <None Include="openWb.json" />
+    <None Include="openWb.parameters.json" />
     <None Include="sqlMultiVMs.json" />
     <None Include="sqlMultiVMs.parameters.json" />
     <None Include="sqlVM.json" />
     <None Include="sqlVM.parameters.json" />
+    <None Include="stubVM.json" />
+    <None Include="stubVM.parameters.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DSC\" />
