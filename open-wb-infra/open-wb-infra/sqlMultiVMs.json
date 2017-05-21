@@ -25,13 +25,13 @@
     "sqlMachineName": {
       "type": "string",
       "metadata": {
-        "description": "The name of the Web Server VM"
+        "description": "The name of the SQL Server VM"
       }
     },
     "sqlMachineSize": {
       "type": "string",
       "metadata": {
-        "description": "The size of the Web Server VM"
+        "description": "The size of the SQL Server VM"
       }
     },
     "virtualNetworkName": {

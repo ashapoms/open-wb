@@ -8,16 +8,40 @@
     "adminPassword": {
       "value": "P@ssw0rd!@#$%"
     },
+    "loadMachineName": {
+      "value": "open-wb-load"
+    },
+    "loadMachineSize": {
+      "value": "Standard_D1_v2"
+    },
     "webMachineName": {
       "value": "open-wb-web01"
     },
     "webMachineSize": {
       "value": "Standard_D1_v2"
     },
+    "sqlMachineName": {
+      "value": "open-wb-db"
+    },
+    "sqlMachineSize": {
+      "value": "Standard_D2_v2"
+    },
+    "sqlAuthenticationLogin": {
+      "value": "wbadmin"
+    },
+    "sqlAuthenticationPassword": {
+      "value": "P@ssw0rd!@#$%"
+    },
     "gateVMSSName": {
       "value": "open-wb-g"
     },
     "gateMachineSize": {
+      "value": "Standard_D1_v2"
+    },
+    "stubMachineName": {
+      "value": "open-wb-stub"
+    },
+    "stubMachineSize": {
       "value": "Standard_D1_v2"
     },
     "virtualNetworkName": {
