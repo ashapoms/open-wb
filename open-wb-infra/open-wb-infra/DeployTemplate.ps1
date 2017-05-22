@@ -3,8 +3,13 @@
 #
 # The script creates resource group and deploy ARM template
 #
-Add-AzureRmAccount
-$DeployIndex = "121"
+
+$aadpass = ConvertTo-SecureString "DMSVonashu26.@3!" -AsPlainText -Force
+$aadcred = New-Object System.Management.Automation.PSCredential ("admin@contosomsspb.onmicrosoft.com", $aadpass)
+
+#Add-AzureRmAccount
+Login-AzureRmAccount -Credential $aadcred
+$DeployIndex = "131"
 $ResourceGroupName = "Open-RG" + $DeployIndex
 $ResourceGroupLocation = "westeurope"
 $OpenDeploymentName = "Open-Dep" + $DeployIndex
@@ -33,4 +38,3 @@ New-AzureRmResourceGroupDeployment -Name $OpenDeploymentName `
                                        -TemplateFile $TemplateFile `
                                        -TemplateParameterFile $TemplateParametersFile `
                                        -Verbose `
-

@@ -151,5 +151,9 @@
     }
   ],
   "outputs": {
+    "Scale Set Instances": {
+      "type": "object",
+      "value": "[reference(concat('Microsoft.Compute/virtualMachineScaleSets', variables('gateNamingInfix')))]"
+    }
   }
 }
