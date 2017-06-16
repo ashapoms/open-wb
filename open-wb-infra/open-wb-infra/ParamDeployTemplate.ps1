@@ -25,4 +25,4 @@ New-AzureRmResourceGroupDeployment -Name $DeploymentName `
                                        -ResourceGroupName $ResourceGroupName `
                                        -TemplateFile $TemplateFile `
                                        -TemplateParameterFile $TemplateParametersFile `
-                                       -Verbose `
+                                       -Verbose
