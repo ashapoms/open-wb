@@ -37,4 +37,4 @@ New-AzureRmResourceGroupDeployment -Name $OpenDeploymentName `
                                        -ResourceGroupName $ResourceGroupName `
                                        -TemplateFile $TemplateFile `
                                        -TemplateParameterFile $TemplateParametersFile `
-                                       -Verbose `
+                                       -Verbose 

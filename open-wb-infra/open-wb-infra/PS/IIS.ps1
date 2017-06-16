@@ -1,7 +1,7 @@
 #
 # IIS.ps1
 #
-# The configuration to install Web Server role with ASP.NET and management console 
+# The configuration to install Web Server role with ASP.NET, FTP features and management console 
 #
 configuration IISInstall 
 { 
@@ -17,6 +17,13 @@ configuration IISInstall
         { 
             Ensure = "Present" 
             Name = "Web-Asp-Net"                       
+        }
+        
+        WindowsFeature FTP
+        {
+            Ensure = "Present"
+            Name = "Web-Ftp-Server"
+            IncludeAllSubFeature = $true
         }		
     } 
 }
