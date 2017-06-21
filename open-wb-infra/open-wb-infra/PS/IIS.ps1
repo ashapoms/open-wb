@@ -46,8 +46,8 @@ configuration IISInstall
 
 				## Create FTP
 
-				# Create Ftp site with default home directory c:\inetpub\ftproot
-				New-WebFtpSite -Name appUpload -Port 21 -PhysicalPath C:\inetpub\ftproot
+				# Create Ftp site with default home directory c:\inetpub\wwwroot
+				New-WebFtpSite -Name appUpload -Port 21 -PhysicalPath C:\inetpub\wwwroot
 
 
 				## Configure appropriate settings
