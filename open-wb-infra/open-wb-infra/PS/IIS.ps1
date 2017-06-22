@@ -46,6 +46,12 @@ configuration IISInstall
 
 				## Create FTP
 
+                # Delete iisstart.htm default file
+                if (Test-Path "C:\inetpub\wwwroot\iisstart.htm")
+                {
+                    Remove-Item "C:\inetpub\wwwroot\iisstart.htm"  
+                }
+
 				# Create Ftp site with default home directory c:\inetpub\wwwroot
 				New-WebFtpSite -Name appUpload -Port 21 -PhysicalPath C:\inetpub\wwwroot
 
